@@ -10,10 +10,10 @@ import lombok.*;
 @Builder
 public class LoginDto {
 
-    @NotBlank(message = "usernameOrEmail is required")
+    @NotBlank(message = "Username or email is required")
     private String usernameOrEmail;
 
-    @NotBlank(message = "password is required")
+    @NotBlank(message = "Password is required")
     private String password;
 }
 

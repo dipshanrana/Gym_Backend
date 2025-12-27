@@ -1,20 +1,26 @@
 package com.gym.demo.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class AuthResponse {
-    private
-    @Builder.Default
-    private String tokenType = "Bearer";
+    private String token;
+    private String tokenType;
 
-    // Convenience constructor used by AuthService
     public AuthResponse(String token) {
         this.token = token;
         this.tokenType = "Bearer";
     }
+
+    public AuthResponse(String token, String tokenType) {
+        this.token = token;
+        this.tokenType = tokenType;
+    }
 }
+
