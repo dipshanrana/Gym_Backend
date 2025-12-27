@@ -18,27 +18,38 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
+        Map<String, String> fieldErrors = new HashMap<>();
+
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
-            errors.put(fieldName, message);
+            fieldErrors.put(fieldName, message);
         });
-        return new ResponseEntity<>(errors, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+
+        response.put("message", "Validation failed");
+        response.put("errors", fieldErrors);
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Object> handleBadRequest(BadRequestException ex) {
-        Map<String, String> err = new HashMap<>();
-        err.put("error", ex.getMessage());
-        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", ex.getMessage());
+        response.put("error", ex.getMessage());
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleOther(Exception ex) {
-        Map<String, String> err = new HashMap<>();
-        err.put("error", "internal server error");
-        return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Internal server error");
+        response.put("error", ex.getMessage());
+        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 

@@ -28,6 +28,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // For simplicity keep a single role string
+    // For simplicity keep a single role @Builder.Default
     private String role = "ROLE_USER";
 }

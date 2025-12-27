@@ -26,13 +26,13 @@ public class AuthService {
     @Transactional
     public void register(RegisterDto dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
-            throw new BadRequestException("username already taken");
+            throw new BadRequestException("Username already taken");
         }
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new BadRequestException("email already in use");
+            throw new BadRequestException("Email already in use");
         }
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
-            throw new BadRequestException("passwords do not match");
+            throw new BadRequestException("Passwords do not match");
         }
 
         User user = User.builder()
@@ -52,10 +52,10 @@ public class AuthService {
         // find user
         User user = userRepository.findByUsername(dto.getUsernameOrEmail())
                 .orElseGet(() -> userRepository.findByEmail(dto.getUsernameOrEmail())
-                        .orElseThrow(() -> new BadRequestException("invalid credentials")));
+                        .orElseThrow(() -> new BadRequestException("Invalid credentials")));
 
         String token = jwtUtil.generateToken(user.getUsername());
-        return new AuthResponse(token);
+        return new AuthResponse(token, "Bearer");
     }
 }
 

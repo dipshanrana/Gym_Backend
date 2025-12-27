@@ -13,18 +13,20 @@ import lombok.*;
 @Builder
 public class RegisterDto {
 
-    @NotBlank(message = "username is required")
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, message = "Username must be at least 3 characters")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username can only contain letters, numbers, and underscores")
     private String username;
 
-    @NotBlank(message = "email is required")
-    @Email(message = "email should be valid")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please enter a valid email address")
     private String email;
 
-    @NotBlank(message = "password is required")
-    @Size(min = 8, message = "password must be at least 8 characters")
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
-    @NotBlank(message = "confirmPassword is required")
+    @NotBlank(message = "Please confirm your password")
     private String confirmPassword;
 }
 
