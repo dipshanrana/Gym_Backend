@@ -3,6 +3,7 @@ package com.gym.demo.service;
 import com.gym.demo.dto.AuthResponse;
 import com.gym.demo.dto.LoginDto;
 import com.gym.demo.dto.RegisterDto;
+import com.gym.demo.dto.UserDto;
 import com.gym.demo.exception.BadRequestException;
 import com.gym.demo.model.User;
 import com.gym.demo.repository.UserRepository;
@@ -54,8 +55,20 @@ public class AuthService {
                 .orElseGet(() -> userRepository.findByEmail(dto.getUsernameOrEmail())
                         .orElseThrow(() -> new BadRequestException("Invalid credentials")));
 
-        String token = jwtUtil.generateToken(user.getUsername());
-        return new AuthResponse(token, "Bearer");
+        // Generate token with role
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+
+        // Create UserDto with user details
+        UserDto userDto = new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getPasswordChangeRequired()
+        );
+
+        // Return response with nested user object
+        return new AuthResponse(token, userDto);
     }
 }
 

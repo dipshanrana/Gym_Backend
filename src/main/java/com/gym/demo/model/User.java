@@ -28,6 +28,16 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // For simplicity keep a single role @Builder.Default
+    private String fullname;
+
+    @Builder.Default
+    private Boolean enabled = true;
+
+    @Builder.Default
+    @Column(name = "password_change_required")
+    private Boolean passwordChangeRequired = false;
+
+    // For simplicity keep a single role string
+    @Builder.Default
     private String role = "ROLE_USER";
 }
